@@ -33,7 +33,7 @@ public class CrimeEntriesService {
 
     public void getCrimeEntriesAround(LatLng latLng, String month, Context context, Response.Listener<String> responseListener, Response.ErrorListener errorListener) {
         String fullUrl = String.format(uri, latLng.latitude, latLng.longitude, month);
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, uri, responseListener, errorListener);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, fullUrl, responseListener, errorListener);
         queue.add(stringRequest);
     }
 
