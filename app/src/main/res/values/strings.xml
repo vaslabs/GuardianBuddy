@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">GuardianBuddy</string>
     <string name="title_activity_map">Criminal activity in your area</string>
+    <string name="show_crime">Show crime around me</string>
 </resources>
