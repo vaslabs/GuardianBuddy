@@ -1,12 +1,13 @@
 package com.vaslabs.police_api;
 
 import com.google.gson.annotations.SerializedName;
-
 /**
  * Created by vnicolaou on 02/11/15.
  */
 public final class CrimeEntry {
-    private String category;
+
+
+    private CategoryType category = CategoryType.OTHER_THEFT;
 
     @SerializedName("location_type")
     private String locationType;
@@ -25,7 +26,7 @@ public final class CrimeEntry {
     private String locationSubtype;
     private String month;
 
-    public String getCategory() {
+    public CategoryType getCategory() {
         return category;
     }
 

@@ -19,9 +19,10 @@ public class TestWrapperClasses extends AndroidTestCase{
     public void testCrimeEntryDeserialisation() {
         Gson gson = new Gson();
         Reader reader = new BufferedReader(new InputStreamReader(this.getContext().getResources().openRawResource(R.raw.sample_data)));
-        CrimeEntry[] crimeEntries = gson.fromJson(reader, CrimeEntry[].class);
+
+        CrimeEntry[] crimeEntries = CrimeEntriesService.getCrimeEntriesFromJson(reader);
         CrimeEntry crimeEntry = crimeEntries[0];
-        assertEquals("anti-social-behaviour", crimeEntry.getCategory());
+        assertEquals(CategoryType.ANTISOCIAL, crimeEntry.getCategory());
         assertEquals("Force", crimeEntry.getLocationType());
         Location location = crimeEntry.getLocation();
         assertEquals(53.474670, location.getLatitude());

@@ -9,6 +9,10 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.vaslabs.police_api.adapters.CategoryTypeAdapter;
+
+import java.io.Reader;
 
 /**
  * Created by vnicolaou on 02/11/15.
@@ -39,7 +43,16 @@ public class CrimeEntriesService {
 
 
     public static CrimeEntry[] getCrimeEntriesFromJson(String response) {
-        Gson gson = new Gson();
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(CategoryType.class, new CategoryTypeAdapter() );
+        Gson gson = gsonBuilder.create();
         return gson.fromJson(response, CrimeEntry[].class);
+    }
+
+    public static CrimeEntry[] getCrimeEntriesFromJson(Reader reader) {
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(CategoryType.class, new CategoryTypeAdapter() );
+        Gson gson = gsonBuilder.create();
+        return gson.fromJson(reader, CrimeEntry[].class);
     }
 }
