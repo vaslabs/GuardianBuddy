@@ -1,5 +1,6 @@
 package com.vaslabs.police_api;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.SerializedName;
 /**
  * Created by vnicolaou on 02/11/15.
@@ -60,5 +61,24 @@ public final class CrimeEntry {
 
     public String getMonth() {
         return month;
+    }
+
+    public boolean worthsMention(LatLng position) {
+
+        double distance = CrimeStatistics.distanceBetween(this, position);
+        if (distance > 200)
+            return false;
+        switch (this.getCategory()) {
+            case VIOLENT_CRIME:
+                return true;
+            case LOCAL_RESOLUTION:
+            case PUBLIC_ORDER:
+            case UNIDENTIFIED:
+                return false;
+
+        }
+        if (this.getOutcomeStatus() != null && this.getOutcomeStatus().getCategory().equals("Unable to prosecute suspect"))
+            return false;
+        return true;
     }
 }

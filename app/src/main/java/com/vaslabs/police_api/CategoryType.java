@@ -13,7 +13,7 @@ public enum CategoryType {
     DRUGS("drugs"), OTHER_THEFT("other-theft"), SHOPLIFTING("shoplifting"), THEFT_FROM_PERSON("theft-from-the-person"),
     VEHICLE_CRIME("vehicle-crime", BitmapDescriptorFactory.HUE_ORANGE),
     VIOLENT_CRIME("violent-crime", BitmapDescriptorFactory.HUE_RED), ROBBERY("robbery"),
-    OTHER_CRIME("other-crime"), POSSESSION_OF_WEAPONS("possession-of-weapons"),
+    OTHER_CRIME("other-crime"), POSSESSION_OF_WEAPONS("possession-of-weapons", BitmapDescriptorFactory.HUE_MAGENTA),
     UNIDENTIFIED("other"), LOCAL_RESOLUTION("Local resolution"), PUBLIC_ORDER("public-order");
 
     private final String description;

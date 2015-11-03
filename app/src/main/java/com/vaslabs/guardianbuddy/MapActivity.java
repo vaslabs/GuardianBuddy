@@ -23,6 +23,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.vaslabs.police_api.CategoryType;
 import com.vaslabs.police_api.CrimeEntriesService;
 import com.vaslabs.police_api.CrimeEntry;
 import com.vaslabs.police_api.CrimeStatistics;
@@ -37,6 +38,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private static final String LOCATION_PROVIDER = LocationManager.GPS_PROVIDER;
     private Marker myPositionMarker;
     private List<Marker> crimeMarkers = new ArrayList<Marker>();
+    private CrimeEntry[] lastCrimeEntries;
     private Context context;
 
     @Override
@@ -70,12 +72,55 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         if (id == R.id.show_crime) {
             showCrime();
             return true;
+        } else if (id == R.id.only_violent) {
+            filterOutNonViolent();
+            return true;
+        } else if (id == R.id.clear_filters) {
+            clearFilters();
+        } else if (id == R.id.smart_filter) {
+            smartFiltering();
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    private void smartFiltering() {
+        if (lastCrimeEntries == null)
+            return;
+        int counter = 0;
+        for (CrimeEntry crimeEntry : lastCrimeEntries) {
+            if (!crimeEntry.worthsMention(myPositionMarker.getPosition())) {
+                crimeMarkers.get(counter++).setVisible(false);
+            } else {
+                crimeMarkers.get(counter++).setVisible(true);
+            }
+        }
+    }
+
+    private void clearFilters() {
+        if (lastCrimeEntries == null)
+            return;
+        for (Marker marker : crimeMarkers) {
+            marker.setVisible(true);
+        }
+    }
+
+    private void filterOutNonViolent() {
+        if (lastCrimeEntries == null)
+            return;
+        int counter = 0;
+        for (Marker marker : crimeMarkers) {
+            if (lastCrimeEntries[counter++].getCategory() != CategoryType.VIOLENT_CRIME)
+                marker.setVisible(false);
+        }
+    }
+
     private void showCrime() {
+        for (Marker marker : crimeMarkers) {
+            marker.remove();
+        }
+        lastCrimeEntries = null;
+        crimeMarkers.clear();
         CrimeEntriesService.getInstance().getCrimeEntriesAround(myPositionMarker.getPosition(),
                 "2015-07", this, new Response.Listener<String>() {
                     @Override
@@ -96,14 +141,17 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         CrimeEntry[] crimeEntries = CrimeEntriesService.getCrimeEntriesFromJson(response);
         CrimeStatistics crimeStatistics = CrimeStatistics.generate(crimeEntries);
         crimeEntries = crimeStatistics.orderByNearest(myPositionMarker.getPosition());
-        for (int i = 0; i < crimeEntries.length && i < 10; i++) {
+        for (int i = 0; i < crimeEntries.length; i++) {
             final CrimeEntry crimeEntry = crimeEntries[i];
-            final LatLng latLng = new LatLng(crimeEntry.getLocation().getLatitude(),
-                    crimeEntry.getLocation().getLongitude());
+            final LatLng latLng = new LatLng(crimeEntry.getLocation().getLatitude() + (Math.random()*0.001),
+                    crimeEntry.getLocation().getLongitude() + (Math.random()*0.001));
 
-            Marker marker = mMap.addMarker(new MarkerOptions().position(latLng).title(crimeEntry.getCategory().name())
+            Marker marker = mMap.addMarker(new MarkerOptions()
+                    .position(latLng).title(crimeEntry.getCategory().name())
                     .icon(BitmapDescriptorFactory.defaultMarker(crimeEntry.getCategory().color)));
+            crimeMarkers.add(marker);
         }
+        lastCrimeEntries = crimeEntries;
     }
 
     /**

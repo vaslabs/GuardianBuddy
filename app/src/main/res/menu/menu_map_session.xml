@@ -4,5 +4,15 @@
     <item android:id="@+id/show_crime" android:title="@string/show_crime"
         android:orderInCategory="100"
         tools:showAsAction="always"/>
+    <item android:id="@+id/only_violent" android:title="@string/show_only_violent"
+        android:orderInCategory="100"
+        tools:showAsAction="always"/>
 
+    <item android:id="@+id/smart_filter" android:title="@string/smart_filter"
+    android:orderInCategory="100"
+    tools:showAsAction="always"/>
+
+    <item android:id="@+id/clear_filters" android:title="@string/clear_filters"
+        android:orderInCategory="100"
+        tools:showAsAction="always"/>
 </menu>

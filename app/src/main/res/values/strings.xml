@@ -2,4 +2,7 @@
     <string name="app_name">GuardianBuddy</string>
     <string name="title_activity_map">Criminal activity in your area</string>
     <string name="show_crime">Show crime around me</string>
+    <string name="show_only_violent">Show only violent crimes</string>
+    <string name="clear_filters">Clear filters</string>
+    <string name="smart_filter">Smart filtering</string>
 </resources>
